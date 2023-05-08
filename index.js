@@ -17,4 +17,17 @@ app.post("/", async (req, res) => {
     res.json(newUser)
 })
 
+app.put("/:id", async (req, res) => {
+    const id = req.params.id
+    const newAge = req.body.age
+    const newUser = await prisma.user.update(
+        {
+            where: { id: parseInt(id) },
+            data: { age: newAge }
+        }
+    )
+
+    res.json(newUser)
+})
+
 app.listen(PORT, () => console.log(`server is running on port ${PORT}`))
