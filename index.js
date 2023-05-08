@@ -1,11 +1,14 @@
 const express = require("express")
 const app = express()
 const PORT = 3001
-// import { PrismaClient } from '@prisma/client'
-// const prisma = new PrismaClient()
+const { PrismaClient } = require('@prisma/client')
+// import  from '@prisma/client'
+
+const prisma = new PrismaClient()
 
 app.get("/",(req,res) => {
-    res.status(200).json("Hello")
+    const allUsers = prisma.user.findMany()
+    res.json(allUsers)
 })
 
 app.listen(PORT,() => console.log(`server is running on port ${PORT}`))
