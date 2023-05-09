@@ -4,48 +4,35 @@ const PORT = 3001
 const { PrismaClient } = require('@prisma/client')
 // import  from '@prisma/client'
 const prisma = new PrismaClient()
+// {log:["query"]}
 
 app.use(express.json())
 
-app.get("/", async (req, res) => {
-    const allUsers = await prisma.person_loginfo.findMany()
-    res.json(allUsers)
-})
-app.get("/:id", async (req, res) => {
-    const id = req.params.id
-    const newUser = await prisma.person_loginfo.findUnique({
-        where: {
-          id: parseInt(id),
-        },
-        include: {
-            person: true,
-        },
-      })
-    res.json(newUser)
-})
-
-// app.post("/", async (req, res) => {
-//     const person = await prisma.person.create({ data: req.body })
-//     res.json(person)
-// })
-
-//create person_info
 app.post("/", async (req, res) => {
-    const person_info = await prisma.person_loginfo.create({ data: req.body })
-    res.json(person_info)
+   const newUser = await prisma.person.create({
+      data: {
+         name: "abomba",
+         email: "abomba",
+         password: "abomba"
+      }
+   })
+   console.log(newUser);
+   res.json(newUser)
+})
+app.get("/", async (req, res) => {
+   const search = "Ay"
+   const newUser =  await prisma.person.findMany({
+      where:{
+         name: { contains : search}
+      }
+   })
+   console.log(newUser);
+   res.json({ length : newUser.length, newUser })
 })
 
+// query on relATIONships
 
-app.put("/:id", async (req, res) => {
-    const id = req.params.id
-    // const newAge = req.body.age
-    const newUser = await prisma.user.update(
-        {
-            where: { id: parseInt(id) },
-            data: { age: req.body.age }
-        }
-    )
-    res.json(newUser)
-})
+// include,select,createmany,create,findUnique,findfirst,take,skip,orderby,where{in,not,equals,contains,notin,endwiths, startwith}
+// to use AND,NOT etc, you put the parameters in an array
 
 app.listen(PORT, () => console.log(`server is running on port ${PORT}`))
