@@ -1,48 +1,51 @@
-
 generator client {
     provider = "prisma-client-js"
 }
 
 datasource db {
     provider = "postgresql"
-    url = env("DATABASE_URL")
+    url      = env("DATABASE_URL")
 }
-
-model user{
-    id Int @id @default(autoincrement())
-    firstName String
-    lastName String
-    age Int
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-}
-
-// model User {
-//   id      Int      @id @default(autoincrement())
-//   profile Profile?
-// }
-
-// model Profile {
-//   id     Int  @id @default(autoincrement())
-//   user   User @relation(fields: [userId], references: [id])
-//   userId Int  @unique
-// }
 
 model person {
-    id Int @id @default(autoincrement())
-    name String
-    email String @unique
-    password String
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-    gender String @default("male")
-    person_loginfo person_loginfo?
+    id         String      @id @default(uuid())
+    name       String
+    email      String      @unique
+    password   String
+    role       Role        @default(BASIC)
+    createdAt  DateTime    @default(now())
+    updatedAt  DateTime    @updatedAt
+    gender     String      @default("male")
+    posts      post[]
+    preference preference?
+
+    @@index([email])
 }
 
-model person_loginfo {
-    id Int @id @default(autoincrement())
-    email String
-    password String
-    person person @relation(fields: [personId], references: [id] )
-    personId Int @unique
+model preference {
+    id       String  @id @default(uuid())
+    cookie   Boolean
+    person   person  @relation(fields: [personId], references: [id])
+    personId String  @unique
+}
+
+model post {
+    id         String     @id @default(uuid())
+    title      String
+    rating     Float
+    createdAt  DateTime   @default(now())
+    updatedAt  DateTime   @updatedAt
+    author     person     @relation(fields: [authorId], references: [id])
+    authorId   String
+    categories category[]
+}
+
+model category {
+    id    String @id @default(uuid())
+    posts post[]
+}
+
+enum Role {
+    BASIC
+    ADMIN
 }
