@@ -19,14 +19,13 @@ app.post("/", async (req, res) => {
 
 app.put("/:id", async (req, res) => {
     const id = req.params.id
-    const newAge = req.body.age
+    // const newAge = req.body.age
     const newUser = await prisma.user.update(
         {
             where: { id: parseInt(id) },
-            data: { age: newAge }
+            data: { age: req.body.age }
         }
     )
-
     res.json(newUser)
 })
 

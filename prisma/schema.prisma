@@ -17,3 +17,13 @@ model user{
     updatedAt DateTime @updatedAt
 }
 
+model User {
+  id      Int      @id @default(autoincrement())
+  profile Profile?
+}
+
+model Profile {
+  id     Int  @id @default(autoincrement())
+  user   User @relation(fields: [userId], references: [id])
+  userId Int  @unique
+}
