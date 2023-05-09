@@ -8,14 +8,33 @@ const prisma = new PrismaClient()
 app.use(express.json())
 
 app.get("/", async (req, res) => {
-    const allUsers = await prisma.user.findMany()
+    const allUsers = await prisma.person_loginfo.findMany()
     res.json(allUsers)
 })
-
-app.post("/", async (req, res) => {
-    const newUser = await prisma.user.create({ data: req.body })
+app.get("/:id", async (req, res) => {
+    const id = req.params.id
+    const newUser = await prisma.person_loginfo.findUnique({
+        where: {
+          id: parseInt(id),
+        },
+        include: {
+            person: true,
+        },
+      })
     res.json(newUser)
 })
+
+// app.post("/", async (req, res) => {
+//     const person = await prisma.person.create({ data: req.body })
+//     res.json(person)
+// })
+
+//create person_info
+app.post("/", async (req, res) => {
+    const person_info = await prisma.person_loginfo.create({ data: req.body })
+    res.json(person_info)
+})
+
 
 app.put("/:id", async (req, res) => {
     const id = req.params.id
