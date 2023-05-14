@@ -9,10 +9,6 @@ app.use(express.json())
 
 app.post("/", async (req, res) => {
    const newUser = await prisma.logInfo.create({
-      // data: {
-      //    name: 'fif new',
-      //    email: "secjksjkjksdond new",
-      // }
       data: {
          password: "jkdjkjksdjksd",
          userId:"aef329ac-16e0-4135-904e-9ea46b7c0e35"
@@ -22,7 +18,6 @@ app.post("/", async (req, res) => {
 })
 
 app.get("/", async (req, res) => {
-   // await prisma.post.deleteMany()
    const newUser = await prisma.logInfo.findMany()
    res.json({ total: newUser.length, newUser })
 })
